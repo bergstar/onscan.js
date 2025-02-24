@@ -163,60 +163,32 @@
 		 * @return string
 		 */
 		decodeKeyEvent : function (oEvent) {
-			var iCode = this._getNormalizedKeyNum(oEvent);
-			const jsonCharacters = [
-				32,    // space
-				33,    // !
-				34,    // "
-				35,    // #
-				36,    // $
-				37,    // %
-				38,    // &
-				39,    // '
-				40,    // (
-				41,    // )
-				42,    // *
-				43,    // +
-				44,    // ,
-				45,    // -
-				46,    // .
-				47,    // /
-				58,    // :
-				59,    // ;
-				60,    // <
-				61,    // =
-				62,    // >
-				63,    // ?
-				64,    // @
-				91,    // [
-				92,    // \
-				93,    // ]
-				94,    // ^
-				95,    // _
-				96,    // `
-				123,   // {
-				124,   // |
-				125,   // }
-				126    // ~
-			];
-			switch (true) {
-				case iCode >= 48 && iCode <= 90: // numbers and uppercase letters
-				case iCode >= 96 && iCode <= 105: // numbers on numeric keypad
-				case iCode >= 106 && iCode <= 111: // operations on numeric keypad (+, -, *, /, etc.)
-				case jsonCharacters.includes(iCode): // all other special characters used in JSON and typical on a keyboard
-					if (oEvent.key !== undefined && oEvent.key !== '') {
-						return oEvent.key;
-					}
+			var iCode = this._getNormalizedKeyNum(oEvent); // Normalize the key code
 
-					var sDecoded = String.fromCharCode(iCode);
-					switch (oEvent.shiftKey) {
-						case false: sDecoded = sDecoded.toLowerCase(); break;
-						case true: sDecoded = sDecoded.toUpperCase(); break;
-					}
-					return sDecoded;
-				default:
-					return ''; // Return empty string for non-handled keys
+			// Debug: Log the normalized key code
+			console.log('Normalized Key Code:', iCode);
+
+			var sDecoded = String.fromCharCode(iCode); // Decode the key code to a character
+			// Debug: Log the initial decoded character before applying shift modifications
+			console.log('Initial Decoded Character:', sDecoded);
+
+			switch (oEvent.shiftKey) {
+				case false:
+					sDecoded = sDecoded.toLowerCase(); // Convert to lowercase if shift is not pressed
+					// Debug: Log the character if shift is not pressed
+					console.log('Shift Key Not Pressed - Character Lowercased:', sDecoded);
+					break;
+				case true:
+					sDecoded = sDecoded.toUpperCase(); // Convert to uppercase if shift is pressed
+					// Debug: Log the character if shift is pressed
+					console.log('Shift Key Pressed - Character Uppercased:', sDecoded);
+					break;
 			}
+
+			// Debug: Log the final decoded character to be returned
+			console.log('Final Decoded Character:', sDecoded);
+
+			return sDecoded;
 		},
 		
 		/**
