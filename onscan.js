@@ -165,32 +165,58 @@
 		decodeKeyEvent : function (oEvent) {
 			var iCode = this._getNormalizedKeyNum(oEvent);
 			const jsonCharacters = [
-				186, // :
-				188, // ,
-				189, // -
-				219, // {
-				191,
-				221, // }
-				222, // "
+				32,    // space
+				33,    // !
+				34,    // "
+				35,    // #
+				36,    // $
+				37,    // %
+				38,    // &
+				39,    // '
+				40,    // (
+				41,    // )
+				42,    // *
+				43,    // +
+				44,    // ,
+				45,    // -
+				46,    // .
+				47,    // /
+				58,    // :
+				59,    // ;
+				60,    // <
+				61,    // =
+				62,    // >
+				63,    // ?
+				64,    // @
+				91,    // [
+				92,    // \
+				93,    // ]
+				94,    // ^
+				95,    // _
+				96,    // `
+				123,   // {
+				124,   // |
+				125,   // }
+				126    // ~
 			];
 			switch (true) {
-				case iCode >= 48 && iCode <= 90: // numbers and letters
-				case iCode >= 106 && iCode <= 111: // operations on numeric keypad (+, -, etc.)
-				case jsonCharacters.includes(iCode): // characters used in JSON
+				case iCode >= 48 && iCode <= 90: // numbers and uppercase letters
+				case iCode >= 96 && iCode <= 105: // numbers on numeric keypad
+				case iCode >= 106 && iCode <= 111: // operations on numeric keypad (+, -, *, /, etc.)
+				case jsonCharacters.includes(iCode): // all other special characters used in JSON and typical on a keyboard
 					if (oEvent.key !== undefined && oEvent.key !== '') {
 						return oEvent.key;
 					}
-				
+
 					var sDecoded = String.fromCharCode(iCode);
 					switch (oEvent.shiftKey) {
 						case false: sDecoded = sDecoded.toLowerCase(); break;
 						case true: sDecoded = sDecoded.toUpperCase(); break;
 					}
 					return sDecoded;
-				case iCode >= 96 && iCode <= 105: // numbers on numeric keypad
-					return 0+(iCode-96);
+				default:
+					return ''; // Return empty string for non-handled keys
 			}
-			return '';
 		},
 		
 		/**
