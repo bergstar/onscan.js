@@ -164,60 +164,31 @@
 		 */
 		decodeKeyEvent : function (oEvent) {
 			var iCode = this._getNormalizedKeyNum(oEvent);
-			const jsonCharacters = [
-				32,    // space
-				33,    // !
-				34,    // "
-				35,    // #
-				36,    // $
-				37,    // %
-				38,    // &
-				39,    // '
-				40,    // (
-				41,    // )
-				42,    // *
-				43,    // +
-				44,    // ,
-				45,    // -
-				46,    // .
-				47,    // /
-				58,    // :
-				59,    // ;
-				60,    // <
-				61,    // =
-				62,    // >
-				63,    // ?
-				64,    // @
-				91,    // [
-				92,    // \
-				93,    // ]
-				94,    // ^
-				95,    // _
-				96,    // `
-				123,   // {
-				124,   // |
-				125,   // }
-				126    // ~
-			];
-			switch (true) {
-				case iCode >= 48 && iCode <= 90: // numbers and uppercase letters
-				case iCode >= 96 && iCode <= 105: // numbers on numeric keypad
-				case iCode >= 106 && iCode <= 111: // operations on numeric keypad (+, -, *, /, etc.)
-				case jsonCharacters.includes(iCode): // all other special characters used in JSON and typical on a keyboard
-					if (oEvent.key !== undefined && oEvent.key !== '') {
-						return oEvent.key;
-					}
 
-					var sDecoded = String.fromCharCode(iCode);
-					switch (oEvent.shiftKey) {
-						case false: sDecoded = sDecoded.toLowerCase(); break;
-						case true: sDecoded = sDecoded.toUpperCase(); break;
-					}
-					return sDecoded;
-				default:
-					return ''; // Return empty string for non-handled keys
+			// Extended list of non-printable and system key codes to filter out
+			const systemKeyCodes = [
+				16, 17, 18, // Shift, Ctrl, Alt
+				19, // Pause/Break
+				20, // Caps Lock
+				27, // Escape
+				33, 34, 35, 36, // Page Up, Page Down, End, Home
+				37, 38, 39, 40, // Arrow keys (Left, Up, Right, Down)
+				45, 46, // Insert, Delete
+				91, 92, 93, // Windows keys and Context Menu
+				112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, // F1-F12
+				144, 145 // Num Lock, Scroll Lock
+			];
+
+			// Check if the key code is one of the system keys
+			if (systemKeyCodes.includes(iCode)) {
+				return ''; // Return empty string for system keys and non-printable keys
 			}
+
+			// Return the key value if it's not a system key or non-printable key
+			return oEvent.key;
 		},
+
+
 		
 		/**
 		 * Simulates a scan of the provided code.
