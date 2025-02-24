@@ -164,10 +164,18 @@
 		 */
 		decodeKeyEvent : function (oEvent) {
 			var iCode = this._getNormalizedKeyNum(oEvent);
+			const jsonCharacters = [
+				186, // :
+				188, // ,
+				189, // -
+				219, // {
+				221, // }
+				222, // "
+			];
 			switch (true) {
 				case iCode >= 48 && iCode <= 90: // numbers and letters
 				case iCode >= 106 && iCode <= 111: // operations on numeric keypad (+, -, etc.)
-				case iCode === 191: //needed to support JSON data (:)
+				case jsonCharacters.includes(iCode): // characters used in JSON
 					if (oEvent.key !== undefined && oEvent.key !== '') {
 						return oEvent.key;
 					}
