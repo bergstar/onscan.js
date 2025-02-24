@@ -165,31 +165,18 @@
 		decodeKeyEvent : function (oEvent) {
 			var iCode = this._getNormalizedKeyNum(oEvent);
 
-			// Extended list of non-printable and system key codes to filter out
-			const systemKeyCodes = [
-				16, 17, 18, // Shift, Ctrl, Alt
-				19, // Pause/Break
-				20, // Caps Lock
-				27, // Escape
-				33, 34, 35, 36, // Page Up, Page Down, End, Home
-				37, 38, 39, 40, // Arrow keys (Left, Up, Right, Down)
-				45, 46, // Insert, Delete
-				91, 92, 93, // Windows keys and Context Menu
-				112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, // F1-F12
-				144, 145 // Num Lock, Scroll Lock
-			];
-
-			// Check if the key code is one of the system keys
-			if (systemKeyCodes.includes(iCode)) {
-				return ''; // Return empty string for system keys and non-printable keys
+			// Check if the key code falls within the specified ranges to ignore
+			if ((iCode >= 0 && iCode <= 31) ||    // Ignore control characters (non-printable)
+				(iCode >= 33 && iCode <= 47) ||   // Ignore page up, page down, arrows, insert delete
+				(iCode >= 91 && iCode <= 95) ||   // Ignore windows keys
+				(iCode >= 112 && iCode <= 145)) { // Ignore function keys F1-F12, Num Lock, Scroll Lock, etc.
+				return ''; // Return empty string for ignored ranges
 			}
 
-			// Return the key value if it's not a system key or non-printable key
+			// Return the key value for all other codes
 			return oEvent.key;
 		},
 
-
-		
 		/**
 		 * Simulates a scan of the provided code.
 	     *
